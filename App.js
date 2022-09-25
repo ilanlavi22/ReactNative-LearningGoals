@@ -20,7 +20,7 @@ export default function App(props) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style='auto' />
+      {/* <StatusBar style='auto' /> */}
 
       <View style={styles.container}>
         <View>
@@ -44,13 +44,13 @@ export default function App(props) {
 
         <Separator />
 
-        <SectionList sections={DATA} keyExtractor={(item, index) => item + index} renderItem={({ item }) => <Item title={item} />} />
-
-        {/* <View>
+        <View>
           <Pressable style={styles.button} onPress={onPress}>
             <Text style={styles.text}>{title}</Text>
           </Pressable>
-        </View> */}
+        </View>
+
+        <SectionList sections={DATA} keyExtractor={(item, index) => item + index} renderItem={({ item }) => <Item title={item} />} />
       </View>
     </SafeAreaView>
   );
@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
     // marginHorizontal: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 20,
     marginLeft: 'auto',
     marginRight: 'auto'
   },
@@ -97,6 +98,7 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: 12,
     paddingHorizontal: 32,
+    marginVertical: 20,
     borderRadius: 4,
     elevation: 3,
     backgroundColor: '#0bb2ea'
@@ -119,7 +121,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#0bb2ea',
     padding: 10,
-    marginVertical: 1,
+    marginVertical: 5,
     alignItems: 'center'
   },
   itemText: {
