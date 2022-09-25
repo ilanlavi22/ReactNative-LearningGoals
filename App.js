@@ -1,10 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, SafeAreaView, View, Text, Image, Button, TextInput, Pressable } from 'react-native';
+import { StyleSheet, SafeAreaView, View, Text, Image, Button, TextInput, SectionList, Pressable } from 'react-native';
 
 export default function App(props) {
   const { onPress, title = 'Save' } = props;
 
   const Separator = () => <View style={styles.separator} />;
+
+  const Item = ({ title }) => (
+    <View style={styles.item}>
+      <Text style={styles.itemText}>{title}</Text>
+    </View>
+  );
+
+  const DATA = [
+    {
+      data: ['React Native', 'Vue JS', 'TypeScript']
+    }
+  ];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -12,7 +24,7 @@ export default function App(props) {
 
       <View style={styles.container}>
         <View>
-          <Text style={styles.title}>My First App yea</Text>
+          <Text style={styles.title}>Learning Goals</Text>
         </View>
 
         <View>
@@ -20,17 +32,25 @@ export default function App(props) {
         </View>
 
         <View style={styles.row}>
-          <TextInput style={styles.input} placeholder='Your Name'></TextInput>
-          <Button styles={styles.button} title='Learn More' accessibilityLabel='Learn more about this purple button'></Button>
+          <TextInput style={styles.input} placeholder='Your course goal'></TextInput>
+          <Button styles={styles.button} title='Add Goal' accessibilityLabel='Add a course goal to your list'></Button>
         </View>
 
         <Separator />
 
         <View>
+          <Text>List of goals ...</Text>
+        </View>
+
+        <Separator />
+
+        <SectionList sections={DATA} keyExtractor={(item, index) => item + index} renderItem={({ item }) => <Item title={item} />} />
+
+        {/* <View>
           <Pressable style={styles.button} onPress={onPress}>
             <Text style={styles.text}>{title}</Text>
           </Pressable>
-        </View>
+        </View> */}
       </View>
     </SafeAreaView>
   );
@@ -79,7 +99,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: '#8BA802'
+    backgroundColor: '#0bb2ea'
   },
 
   text: {
@@ -90,9 +110,19 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   separator: {
-    marginVertical: 50,
+    margin: 10,
     borderBottomColor: '#737373',
     borderBottomWidth: StyleSheet.hairlineWidth,
     width: '100%'
+  },
+  item: {
+    flex: 1,
+    backgroundColor: '#0bb2ea',
+    padding: 10,
+    marginVertical: 1,
+    alignItems: 'center'
+  },
+  itemText: {
+    color: '#fff'
   }
 });
