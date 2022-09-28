@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, SafeAreaView, View, Text, Image, Button, TextInput } from 'react-native';
+import { StyleSheet, SafeAreaView, View, Text, Image, Button, TextInput, ScrollView } from 'react-native';
 
 export default function App() {
   const [inputText, setInputText] = useState('');
@@ -13,6 +13,10 @@ export default function App() {
     if (inputText) {
       setGoals((currentGoal) => [...currentGoal, { id: new Date().getTime().toString(), title: inputText }]);
     }
+  };
+  const handleDelete = (id) => {
+    //const filterGoals = goals.filter((goal) => id !== goal.id);
+    setGoals(goals.filter((goal) => id !== goal.id));
   };
 
   const Separator = () => <View style={styles.separator} />;
@@ -36,12 +40,15 @@ export default function App() {
         <Separator />
 
         <View style={styles.goalContainer}>
-          {goals &&
-            goals.map((goal, id) => (
-              <View key={id} style={styles.goalItem}>
-                <Text style={styles.goalText}>{goal.title}</Text>
-              </View>
-            ))}
+          <ScrollView alwaysBounceVertical={false} indicatorStyle={'black'}>
+            {goals &&
+              goals.map((goal) => (
+                <View key={goal.id} style={styles.goalItem}>
+                  <Text style={styles.goalText}>{goal.title}</Text>
+                  <Button onPress={() => handleDelete(goal.id)} style={styles.btnDelete} title='delete'></Button>
+                </View>
+              ))}
+          </ScrollView>
         </View>
       </View>
     </SafeAreaView>
@@ -115,7 +122,9 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   goalItem: {
-    alignItems: 'flex-start',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     backgroundColor: '#418BDF',
     padding: 8,
     margin: 8,
