@@ -1,24 +1,31 @@
-import { useState } from 'react';
-import { StyleSheet, SafeAreaView, View, Text, Image, Button, TextInput } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, SafeAreaView, View, Text, Image, Button, TextInput, SectionList, Pressable } from 'react-native';
 
-export default function App() {
-  const [inputText, setInputText] = useState('');
-  const [goals, setGoals] = useState([]);
-
-  const goalInputHandler = (enteredText) => {
-    setInputText(enteredText);
+export default function App(props) {
+  const goalInputHandler = (e) => {
+    console.log(e.target.value);
   };
 
-  const addGoalHandler = () => {
-    if (inputText) {
-      setGoals((currentGoal) => [...currentGoal, { id: new Date().getTime().toString(), title: inputText }]);
-    }
-  };
+  const { onPress, title = 'Save' } = props;
 
   const Separator = () => <View style={styles.separator} />;
 
+  const Item = ({ title }) => (
+    <View style={styles.item}>
+      <Text style={styles.itemText}>{title}</Text>
+    </View>
+  );
+
+  const DATA = [
+    {
+      data: ['React Native', 'Vue JS', 'TypeScript']
+    }
+  ];
+
   return (
     <SafeAreaView style={styles.container}>
+      {/* <StatusBar style='auto' /> */}
+
       <View style={styles.container}>
         <View>
           <Text style={styles.title}>Learning Goals</Text>
@@ -30,19 +37,24 @@ export default function App() {
 
         <View style={styles.row}>
           <TextInput style={styles.input} placeholder='Your course goal' onChangeText={goalInputHandler}></TextInput>
-          <Button styles={styles.button} title='Add Goal' accessibilityLabel='Add a course goal to your list' onPress={addGoalHandler}></Button>
+          <Button styles={styles.button} title='Add Goal' accessibilityLabel='Add a course goal to your list'></Button>
         </View>
 
         <Separator />
 
-        <View style={styles.goalContainer}>
-          {goals &&
-            goals.map((goal, id) => (
-              <View key={id} style={styles.goalItem}>
-                <Text style={styles.goalText}>{goal.title}</Text>
-              </View>
-            ))}
+        <View style={styles.goals}>
+          <Text>List of goals ...</Text>
         </View>
+
+        <Separator />
+
+        {/* <View>
+          <Pressable style={styles.button} onPress={onPress}>
+            <Text style={styles.text}>{title}</Text>
+          </Pressable>
+        </View> */}
+
+        {/* <SectionList sections={DATA} keyExtractor={(item, index) => item + index} renderItem={({ item }) => <Item title={item} />} /> */}
       </View>
     </SafeAreaView>
   );
@@ -110,18 +122,17 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     width: '100%'
   },
-  goalContainer: {
-    flex: 4,
-    width: '100%'
+  goals: {
+    flex: 4
   },
-  goalItem: {
-    alignItems: 'flex-start',
-    backgroundColor: '#418BDF',
-    padding: 8,
-    margin: 8,
-    borderRadius: 6
+  item: {
+    flex: 1,
+    backgroundColor: '#0bb2ea',
+    padding: 10,
+    marginVertical: 5,
+    alignItems: 'center'
   },
-  goalText: {
+  itemText: {
     color: '#fff'
   }
 });
