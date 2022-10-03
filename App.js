@@ -1,5 +1,15 @@
 import { useState } from 'react';
-import { StyleSheet, SafeAreaView, View, Text, Image, Button, TextInput, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  SafeAreaView,
+  View,
+  Text,
+  Image,
+  Button,
+  TextInput,
+  ScrollView,
+  FlatList
+} from 'react-native';
 
 export default function App() {
   const [inputText, setInputText] = useState('');
@@ -11,12 +21,15 @@ export default function App() {
 
   const addGoalHandler = () => {
     if (inputText) {
-      setGoals((currentGoal) => [...currentGoal, { id: new Date().getTime().toString(), title: inputText }]);
+      setGoals((currentGoal) => [
+        ...currentGoal,
+        { key: new Date().getTime().toString(), title: inputText }
+      ]);
     }
   };
-  const handleDelete = (id) => {
+  const handleDelete = (key) => {
     //const filterGoals = goals.filter((goal) => id !== goal.id);
-    setGoals(goals.filter((goal) => id !== goal.id));
+    setGoals(goals.filter((goal) => key !== goal.key));
   };
 
   const Separator = () => <View style={styles.separator} />;
@@ -29,26 +42,45 @@ export default function App() {
         </View>
 
         <View>
-          <Image style={styles.image} source={{ uri: 'https://images.unsplash.com/photo-1661956602153-23384936a1d3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80' }} />
+          <Image
+            style={styles.image}
+            source={{
+              uri: 'https://images.unsplash.com/photo-1661956602153-23384936a1d3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80'
+            }}
+          />
         </View>
 
         <View style={styles.row}>
-          <TextInput style={styles.input} placeholder='Your course goal' onChangeText={goalInputHandler}></TextInput>
-          <Button styles={styles.button} title='Add Goal' accessibilityLabel='Add a course goal to your list' onPress={addGoalHandler}></Button>
+          <TextInput
+            style={styles.input}
+            placeholder='Your course goal'
+            onChangeText={goalInputHandler}></TextInput>
+          <Button
+            styles={styles.button}
+            title='Add Goal'
+            accessibilityLabel='Add a course goal to your list'
+            onPress={addGoalHandler}></Button>
         </View>
 
         <Separator />
 
         <View style={styles.goalContainer}>
-          <ScrollView alwaysBounceVertical={false} indicatorStyle={'black'}>
-            {goals &&
-              goals.map((goal) => (
-                <View key={goal.id} style={styles.goalItem}>
-                  <Text style={styles.goalText}>{goal.title}</Text>
-                  <Button onPress={() => handleDelete(goal.id)} style={styles.btnDelete} title='delete'></Button>
+          <FlatList
+            data={goals}
+            renderItem={(goalData) => {
+              const { key, title } = goalData.item;
+              return (
+                <View style={styles.goalItem}>
+                  <Text style={styles.goalText}>{title}</Text>
+                  <Button
+                    onPress={() => handleDelete(key)}
+                    style={styles.btnDelete}
+                    title='delete'></Button>
                 </View>
-              ))}
-          </ScrollView>
+              );
+            }}
+            alwaysBounceVertical={false}
+          />
         </View>
       </View>
     </SafeAreaView>
@@ -126,8 +158,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#418BDF',
-    padding: 8,
-    margin: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 1,
+    marginVertical: 6,
+    marginRight: 10,
     borderRadius: 6
   },
   goalText: {
