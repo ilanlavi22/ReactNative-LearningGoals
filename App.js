@@ -7,7 +7,6 @@ import {
   Image,
   Button,
   TextInput,
-  ScrollView,
   FlatList
 } from 'react-native';
 
@@ -23,13 +22,14 @@ export default function App() {
     if (inputText) {
       setGoals((currentGoal) => [
         ...currentGoal,
-        { key: new Date().getTime().toString(), title: inputText }
+        { id: new Date().getTime().toString(), title: inputText }
       ]);
     }
   };
-  const handleDelete = (key) => {
+  const handleDelete = (id) => {
     //const filterGoals = goals.filter((goal) => id !== goal.id);
-    setGoals(goals.filter((goal) => key !== goal.key));
+    //setGoals(goals.filter((goal) => key !== goal.key));
+    setGoals(goals.filter((goal) => id !== goal.id));
   };
 
   const Separator = () => <View style={styles.separator} />;
@@ -68,17 +68,18 @@ export default function App() {
           <FlatList
             data={goals}
             renderItem={(goalData) => {
-              const { key, title } = goalData.item;
+              const { id, title } = goalData.item;
               return (
                 <View style={styles.goalItem}>
                   <Text style={styles.goalText}>{title}</Text>
                   <Button
-                    onPress={() => handleDelete(key)}
+                    onPress={() => handleDelete(id)}
                     style={styles.btnDelete}
                     title='delete'></Button>
                 </View>
               );
             }}
+            keyExtractor={(item) => item.id}
             alwaysBounceVertical={false}
           />
         </View>
